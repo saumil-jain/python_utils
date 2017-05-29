@@ -1,24 +1,26 @@
 import os
+import subprocess
 
-def update_git_repos_in_dir(root_dir):
-    if not os.path.isdir(root_dir):
-        print('not a valid dir')
-        return
+dir_to_scan = input('Enter dir path:')
 
-    for sub_dir in os.listdir(root_dir):
-        print(os.path.join(root_dir, sub_dir))
-        sub_dir = os.path.join(root_dir, sub_dir)
-        if os.path.isdir(sub_dir) and '.git' in os.listdir(sub_dir):
-            print('git directory')
+if not os.path.isdir(dir_to_scan):
+    print('not a valid dir')
+    exit()
 
-            os.chdir(sub_dir)
+for sub_dir in os.listdir(dir_to_scan):
+    print(os.path.join(dir_to_scan, sub_dir))
+    sub_dir = os.path.join(dir_to_scan, sub_dir)
+    if os.path.isdir(sub_dir) and '.git' in os.listdir(sub_dir):
+        print('git repo found in ' + sub_dir)
 
-            # execute command here
+        os.chdir(sub_dir)
 
-        else:
-            print('not a git directory')
+        # execute command here
+        git_pull_command = ['git', 'pull', 'origin', 'master']
+        completed_process = subprocess.run(git_pull_command, shell=True, stdout=subprocess.PIPE,
+                                           stderr=subprocess.STDOUT)
+        print('git pull command executed. Output is:')
+        print(completed_process.stdout.decode('utf-8'))
 
-
-if __name__=='__main__':
-    dir_to_scan = input('Enter dir path:')
-    update_git_repos_in_dir(dir_to_scan)
+    else:
+        print('git repo not found in ' + sub_dir)
