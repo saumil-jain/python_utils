@@ -16,7 +16,7 @@ for sub_dir in os.listdir(dir_to_scan):
         os.chdir(sub_dir)
 
         # execute command here
-        git_pull_command = ['git', 'pull', 'origin', 'master']
+        git_pull_command = 'git pull origin master'
         completed_process = subprocess.run(git_pull_command, shell=True, stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT)
         print('git pull command executed. Output is:')
